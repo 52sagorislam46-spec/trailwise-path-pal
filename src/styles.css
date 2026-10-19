@@ -447,3 +447,8 @@ button.setting-active { background: var(--card); color: var(--foreground); box-s
 .fly-premium-theme .bg-white {
   background-color: rgb(255 255 255 / 0.85);
 }
+
+/* Google Translate: hide its banner/tooltips so the app layout stays the same */
+.goog-te-banner-frame, iframe.skiptranslate, .goog-te-balloon-frame, #goog-gt-tt, .goog-tooltip, .VIpgJd-ZVi9od-ORHb-OEVmcd, .VIpgJd-ZVi9od-aZ2wEe-wOHMyf { display: none !important; }
+body { top: 0 !important; }
+.goog-text-highlight { background: none !important; box-shadow: none !important; }

@@ -484,7 +484,7 @@ function Reel({
 
         </button>
         {post.text && (
-          <p className="mt-2 text-sm text-white/90 line-clamp-3 whitespace-pre-wrap break-words">
+          <p className="select-text mt-2 text-sm text-white/90 line-clamp-3 whitespace-pre-wrap break-words">
             {post.text}
           </p>
         )}

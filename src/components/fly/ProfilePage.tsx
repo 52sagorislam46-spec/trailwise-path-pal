@@ -1,3 +1,4 @@
+import { LANGUAGES, changeLanguage, languageLabel } from "../../lib/appLanguage";
 import { AddMoneyCard } from "./AddMoneyCard";
 import { UserBadges } from "./badges";
 import { useEffect, useState } from "react";
@@ -472,25 +473,18 @@ export function ProfilePage({
                 <Globe size={20} className="text-gray-500" />
                 <span className="text-sm font-medium flex-1">Language</span>
                 <span className="text-xs text-gray-400">
-                  {language === "bn" ? "বাংলা" : "English"}
+                  {languageLabel(language)}
                 </span>
               </button>
               {showLanguage && (
-                <div className="mx-3 mb-1 rounded-xl border border-gray-100 overflow-hidden">
-                  {[
-                    { code: "en", label: "English" },
-                    { code: "bn", label: "বাংলা" },
-                  ].map((l) => (
+                <div className="mx-3 mb-1 rounded-xl border border-gray-100 overflow-y-auto max-h-72 notranslate" translate="no">
+                  {LANGUAGES.map((l) => (
                     <button
                       key={l.code}
                       onClick={() => {
                         setLanguage(l.code);
-                        try {
-                          localStorage.setItem("app_language", l.code);
-                        } catch {
-                          /* ignore */
-                        }
                         setShowLanguage(false);
+                        changeLanguage(l.code);
                       }}
                       className={`w-full flex items-center justify-between px-4 py-2.5 text-sm hover:bg-gray-50 ${
                         language === l.code
