@@ -445,6 +445,7 @@ function Shell() {
 }
 
 export function FlyApp() {
+  useEffect(() => initAppLanguage(), []);
   return (
     <AuthProvider>
       <CallProvider>
