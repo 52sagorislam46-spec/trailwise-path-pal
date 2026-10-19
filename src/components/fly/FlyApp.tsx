@@ -1,3 +1,4 @@
+import { initAppLanguage } from "../../lib/appLanguage";
 import { useEffect, useMemo, useRef, useState, type MutableRefObject } from "react";
 import { rankForYou, stableAppend, trendingTags, viralIds } from "./recommend";
 import { AD_CONFIG, BannerAd, InterstitialHost } from "./ads";

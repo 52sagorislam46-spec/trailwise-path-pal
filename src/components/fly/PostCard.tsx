@@ -144,7 +144,7 @@ export function CommentItem({
               <UserBadges uid={comment.authorId} />
               {comment.vip && <VipBadge />}
             </button>
-            <p className="text-[14px] leading-snug text-gray-800 break-words whitespace-pre-wrap">{comment.text}</p>
+            <p className="select-text text-[14px] leading-snug text-gray-800 break-words whitespace-pre-wrap">{comment.text}</p>
           </div>
           <div className="flex items-center gap-4 mt-1 px-2 text-xs text-gray-500">
             <span>{timeAgo(comment.createdAt)}</span>
@@ -193,7 +193,7 @@ export function CommentItem({
                           <UserBadges uid={r.authorId} />
                           {r.vip && <VipBadge />}
                         </button>
-                        <p className="text-[14px] leading-snug text-gray-800 break-words whitespace-pre-wrap">
+                        <p className="select-text text-[14px] leading-snug text-gray-800 break-words whitespace-pre-wrap">
                           {r.replyToName && (
                             <button
                               onClick={() => r.replyToId && onOpenProfile(r.replyToId)}
@@ -559,7 +559,7 @@ export function PostCard({
                     style={{ background: bg.background }}
                   >
                     <p
-                      className={`${size} font-bold leading-snug text-center whitespace-pre-wrap break-words drop-shadow-sm`}
+                      className={`select-text ${size} font-bold leading-snug text-center whitespace-pre-wrap break-words drop-shadow-sm`}
                       style={{ color: bg.textColor }}
                     >
                       {post.text}
@@ -569,7 +569,7 @@ export function PostCard({
               })()
             ) : (
               <p
-                className={`text-gray-900 mt-1.5 mb-1 whitespace-pre-wrap break-words ${
+                className={`select-text text-gray-900 mt-1.5 mb-1 whitespace-pre-wrap break-words ${
                   !post.mediaUrl && !isAlbum && post.text.length < 85
                     ? "text-[22px] leading-snug"
                     : "text-[15px] leading-[1.55]"
@@ -693,7 +693,7 @@ export function PostCard({
                   >
                     {post.authorUsername}
                   </button>
-                  <span className={captionExpanded ? "" : "line-clamp-1 inline"}>
+                  <span className={`select-text ${captionExpanded ? "" : "line-clamp-1 inline"}`}>
                     {post.text}
                   </span>
                   {!captionExpanded && post.text.length > 60 && (
