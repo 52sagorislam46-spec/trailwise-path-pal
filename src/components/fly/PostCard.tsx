@@ -31,7 +31,7 @@ import { ImageLightbox } from "./ImageLightbox";
 import { Crown } from "lucide-react";
 import { isVipOf, LockedPost, VipBadge } from "./vip";
 import { isAdminVip, UserBadges } from "./badges";
-import { Megaphone, Rocket } from "lucide-react";
+import { Copy, Megaphone, Rocket } from "lucide-react";
 import { BOOST_DAYS, boostPrice, isSponsored, requestBoost } from "./boost";
 import { AddMoneyCard } from "./AddMoneyCard";
 import { LikedBy, ReactionsSheet } from "./ReactionsSheet";
@@ -269,6 +269,37 @@ export function PostCard({
   const [captionExpanded, setCaptionExpanded] = useState(false);
   const [lightbox, setLightbox] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [copied, setCopied] = useState(false);
+  const pressTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const copyPostText = async () => {
+    const t = post.text || "";
+    try {
+      await navigator.clipboard.writeText(t);
+    } catch {
+      const ta = document.createElement("textarea");
+      ta.value = t;
+      document.body.appendChild(ta);
+      ta.select();
+      try { document.execCommand("copy"); } catch { /* ignore */ }
+      ta.remove();
+    }
+    setCopied(true);
+    setTimeout(() => setCopied(false), 1800);
+  };
+  const cancelPress = () => {
+    if (pressTimer.current) clearTimeout(pressTimer.current);
+    pressTimer.current = null;
+  };
+  const longPress = {
+    onTouchStart: () => {
+      cancelPress();
+      pressTimer.current = setTimeout(() => { copyPostText(); }, 550);
+    },
+    onTouchEnd: cancelPress,
+    onTouchMove: cancelPress,
+    onContextMenu: (e: React.MouseEvent) => { e.preventDefault(); copyPostText(); },
+    style: { WebkitTouchCallout: "none" } as React.CSSProperties,
+  };
   const [hidden, setHidden] = useState(false);
   const [boostOpen, setBoostOpen] = useState(false);
   const [showReactions, setShowReactions] = useState(false);
@@ -376,7 +407,12 @@ export function PostCard({
 
 
   return (
-    <article className="bg-white border-b border-gray-100 px-4 py-4">
+    <article className="relative bg-white border-b border-gray-100 px-4 py-4">
+      {copied && (
+        <div className="fixed bottom-24 left-1/2 -translate-x-1/2 z-[100] px-4 py-2 rounded-full bg-gray-900 text-white text-sm font-medium shadow-lg pointer-events-none">
+          লেখা কপি করা হয়েছে
+        </div>
+      )}
       <div className="flex items-start gap-3">
         <button onClick={() => onOpenProfile(post.authorId)}>
           <Avatar uid={post.authorId} src={post.authorPhoto} alt={post.authorName} size={40} />
@@ -403,6 +439,17 @@ export function PostCard({
                 </button>
                 {menuOpen && (
                   <div className="absolute right-0 top-9 z-30 w-44 rounded-xl bg-white shadow-xl border border-gray-100 py-1">
+                    {post.text && (
+                      <button
+                        onClick={() => {
+                          setMenuOpen(false);
+                          copyPostText();
+                        }}
+                        className="w-full flex items-center gap-3 px-3 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-50"
+                      >
+                        <Copy size={16} /> লেখা কপি করুন
+                      </button>
+                    )}
                     {user?.uid === post.authorId ? (
                       <>
                         <button
@@ -559,7 +606,8 @@ export function PostCard({
                     style={{ background: bg.background }}
                   >
                     <p
-                      className={`select-text ${size} font-bold leading-snug text-center whitespace-pre-wrap break-words drop-shadow-sm`}
+                      {...longPress}
+                      className={`select-none ${size} font-bold leading-snug text-center whitespace-pre-wrap break-words drop-shadow-sm`}
                       style={{ color: bg.textColor }}
                     >
                       {post.text}
@@ -569,7 +617,8 @@ export function PostCard({
               })()
             ) : (
               <p
-                className={`select-text text-gray-900 mt-1.5 mb-1 whitespace-pre-wrap break-words ${
+                {...longPress}
+                className={`select-none text-gray-900 mt-1.5 mb-1 whitespace-pre-wrap break-words ${
                   !post.mediaUrl && !isAlbum && post.text.length < 85
                     ? "text-[22px] leading-snug"
                     : "text-[15px] leading-[1.55]"
