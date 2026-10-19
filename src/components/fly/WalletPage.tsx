@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { RewardedAdCard } from "./ads";
+import { RewardedAdCard, REWARDED_STARS_ENABLED } from "./ads";
 import { ArrowLeft, Loader2, Star, Wallet, CheckCircle2, Clock, Trash2 } from "lucide-react";
 import {
   collection,
@@ -149,7 +149,7 @@ export function WalletPage({ onBack }: { onBack: () => void }) {
         <PremiumCard />
         <AddMoneyCard />
 
-        {user && <RewardedAdCard uid={user.uid} />}
+        {REWARDED_STARS_ENABLED && user && <RewardedAdCard uid={user.uid} />}
 
         <div className="rounded-2xl bg-white border border-gray-100 p-4 space-y-3">
           <h2 className="font-semibold text-gray-900">Cash Out</h2>
