@@ -17,7 +17,7 @@ export const LANGUAGES: { code: string; label: string }[] = [
   ["ca","Català"],["eu","Euskara"],["gl","Galego"],["mt","Malti"],["lb","Lëtzebuergesch"],["fy","Frysk"],
   ["co","Corsu"],["la","Latina"],["eo","Esperanto"],["ku","Kurdî"],["ug","ئۇيغۇرچە"],["yi","ייִדיש"],
   ["haw","ʻŌlelo Hawaiʻi"],["sm","Samoan"],["mi","Māori"],["ht","Kreyòl Ayisyen"],["hmn","Hmong"],["ceb","Cebuano"],
-].map(([code, label]) => ({ code, label }));
+].map(([code, label]) => ({ code: code as string, label: label as string }));
 
 export function languageLabel(code: string) {
   return LANGUAGES.find((l) => l.code === code)?.label ?? "English";
@@ -52,7 +52,7 @@ export function initAppLanguage() {
   holder.id = "google_translate_element";
   holder.style.display = "none";
   document.body.appendChild(holder);
-  (window as unknown as Record<string, unknown>).googleTranslateElementInit = () => {
+  (window as unknown as Record<string, unknown>)["googleTranslateElementInit"] = () => {
     const g = (window as unknown as { google?: { translate?: { TranslateElement: new (o: object, id: string) => unknown } } }).google;
     if (g?.translate) new g.translate.TranslateElement({ pageLanguage: "en", autoDisplay: false }, "google_translate_element");
   };
