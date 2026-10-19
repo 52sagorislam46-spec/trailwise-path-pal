@@ -2,7 +2,10 @@ import { useEffect, useState } from "react";
 import { doc, increment, setDoc } from "firebase/firestore";
 import { Gift, Loader2, Megaphone, X } from "lucide-react";
 import { db } from "../../lib/firebase";
-import adVideo from "../../assets/fly-ad.mp4.asset.json";
+import adVideo from "../../assets/fly-ad-49s.mp4.asset.json";
+
+/** Temporarily disabled: watching ads no longer grants stars. Set true to re-enable. */
+export const REWARDED_STARS_ENABLED = false;
 import { useAuth } from "./AuthContext";
 import { isPremium } from "./premium";
 
@@ -91,13 +94,14 @@ export function onReelSeen() {
 }
 
 /** Full-screen video ad creative (your uploaded ad video). */
-function AdVideo() {
+function AdVideo({ onEnded }: { onEnded?: () => void }) {
   return (
     <video
       src={adVideo.url}
       autoPlay
       playsInline
-      loop
+      loop={!onEnded}
+      onEnded={onEnded}
       className="max-h-full max-w-full object-contain"
     />
   );
@@ -145,11 +149,11 @@ export function InterstitialHost() {
         type="button"
         disabled={left > 0}
         onClick={() => setOpen(false)}
-        className="absolute top-4 right-4 rounded-full bg-white/20 px-3 py-1 text-xs"
+        className="absolute bottom-8 right-4 z-10 flex items-center gap-1 rounded-full bg-white/25 px-4 py-2 text-sm font-semibold"
       >
-        {left > 0 ? `${left}s` : <X size={16} />}
+        {left > 0 ? `স্কিপ ${left}s` : (<>স্কিপ <X size={16} /></>)}
       </button>
-      <AdVideo />
+      <AdVideo onEnded={() => setOpen(false)} />
     </div>
   );
 }
